@@ -1,8 +1,7 @@
-import initI18nModel from 'startupjs/i18n/model'
-
-import TestThing from './TestThingModel'
+import UsersModel from './UsersModel'
+import UserModel from './UserModel'
 
 export default function (racer) {
-  initI18nModel(racer)
-  racer.orm('testThings.*', TestThing)
+  racer.orm('users', UsersModel)
+  racer.orm('users.*', UserModel)
 }

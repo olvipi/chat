@@ -1,12 +1,16 @@
+import { filters } from '@startupjs/auth/isomorphic'
+
 export default (components = {}) => [
   {
     path: '/',
     exact: true,
-    component: components.PHome
+    component: components.PHome,
+    filters: [filters.isLoggedIn()],
   },
   {
-    path: '/about',
+    path: '/contacts',
     exact: true,
-    component: components.PAbout
+    component: components.PContacts,
+    // redirect: '/'
   }
 ]

@@ -2,15 +2,19 @@ import React from 'react'
 import { Platform } from 'react-native'
 import init from 'startupjs/init'
 import App from 'startupjs/app'
-import { pug, observer, model } from 'startupjs'
+import { emit, observer, model } from 'startupjs'
 import { registerPlugins } from 'startupjs/plugin'
-import { uiAppPlugin } from '@startupjs/ui'
+import { uiAppPlugin, Button, Div, H5, Row, Span } from '@startupjs/ui'
 import { BASE_URL } from '@env'
-import i18n, { useI18nGlobalInit } from '../i18n'
 import orm from '../model'
-
+import { initAuthApp } from '@startupjs/auth'
+import { LoginForm, RegisterForm, RecoverForm } from '@startupjs/auth-local'
+import { SIGN_UP_URL } from '@startupjs/auth/isomorphic'
 // Frontend micro-services
 import * as main from '../main'
+import * as admin from '../admin'
+
+import './index.styl'
 
 if (Platform.OS === 'web') window.model = model
 
@@ -26,11 +30,53 @@ registerPlugins({
   ]
 })
 
+const renderActions = ({ onSubmit }) => (
+  <Div styleName='actions'>
+    <Button
+      color='primary'
+      variant='flat'
+      onPress={onSubmit}
+    >Sign In</Button>
+    <Row styleName='footer' align='center' vAlign='center'>
+      <Span>Dont't have an account?</Span>
+      <Button
+        color='primary'
+        variant='text'
+        onPress={() => emit('url', SIGN_UP_URL)}
+      >Sign up</Button>
+    </Row>
+  </Div>
+)
+
+
+const getCaptionForm = (slide) => slide === 'sign-in' ? 'Please sign in' : 'Please sign up'
+
 export default observer(() => {
-  return pug`
-    App(
-      apps={ i18n, main }
-      useGlobalInit=useI18nGlobalInit
-    )
-  `
+  const auth = initAuthApp({
+    localForms: {
+      'sign-in': <LoginForm
+        renderActions={renderActions}
+      />,
+      'sign-up': <RegisterForm />
+    },
+    renderForm: function ({
+      slide,
+      socialButtons,
+      localActiveForm,
+      onChangeSlide
+    }) {
+      return (
+        <Div styleName='container'>
+          <Row align='center'>
+            <H5 align='center' bold>{getCaptionForm(slide)}</H5>
+          </Row>
+          <Div style={{ marginTop: 16 }}>
+            {localActiveForm}
+          </Div>
+        </Div>
+      )
+    }
+  })
+
+  return <App apps={{ auth, main, admin }} />
 })

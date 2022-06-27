@@ -1,11 +1,14 @@
 import init from 'startupjs/init'
 import startupjsServer from 'startupjs/server'
 import { initApp } from 'startupjs/app/server'
-import { initI18n, getI18nRoutes } from 'startupjs/i18n/server'
 import { getUiHead, initUi } from '@startupjs/ui/server'
 import orm from '../model'
 import api from './api'
 import getMainRoutes from '../main/routes'
+import getAdminRoutes from '../admin/routes'
+import { initAuth } from '@startupjs/auth/server'
+import { getAuthRoutes } from '@startupjs/auth/isomorphic'
+import { Strategy as LocalStrategy } from '@startupjs/auth-local/server'
 
 // Init startupjs ORM.
 init({ orm })
@@ -15,20 +18,26 @@ startupjsServer({
   secure: false, // TODO: https://github.com/startupjs/startupjs#security
   getHead,
   appRoutes: [
+    ...getAuthRoutes(),
     ...getMainRoutes(),
-    ...getI18nRoutes()
+    ...getAdminRoutes()
   ]
 }, (ee, options) => {
   initApp(ee)
   initUi(ee, options)
-  initI18n(ee)
+  initAuth(ee, {
+    strategies: [
+      new LocalStrategy(),
+    ],
+  })
+
 
   ee.on('routes', expressApp => {
     expressApp.use('/api', api)
   })
 })
 
-function getHead (appName) {
+function getHead(appName) {
   return `
     ${getUiHead()}
     <title>HelloWorld</title>
@@ -36,4 +45,4 @@ function getHead (appName) {
   `
 }
 
-export default function run () {}
+export default function run() { }

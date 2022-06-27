@@ -1,7 +1,8 @@
 import React from 'react'
-import { pug, observer, emit, useValue, useLocal } from 'startupjs'
-import { Button, Div, H1, Layout, Menu, Row, SmartSidebar } from '@startupjs/ui'
-import { faBars } from '@fortawesome/free-solid-svg-icons'
+import { observer, emit, useValue, useLocal } from 'startupjs'
+import { Button, Div, H5, Icon, Layout, Popover, Menu, Row } from '@startupjs/ui'
+import { onLogout } from '@startupjs/auth'
+import { faEllipsisV } from '@fortawesome/free-solid-svg-icons'
 import APP from '../../app.json'
 import './index.styl'
 
@@ -9,37 +10,45 @@ const { displayName } = APP
 
 const APP_NAME = displayName.charAt(0).toUpperCase() + displayName.slice(1)
 
-const MenuItem = observer(({ url, children }) => {
-  const [currentUrl] = useLocal('$render.url')
-  return pug`
-    Menu.Item(
-      active=currentUrl === url
-      onPress=() => emit('url', url)
-    )= children
-  `
-})
 
 export default observer(function ({ children }) {
-  const [opened, $opened] = useValue(false)
+  const [url] = useLocal('$render.url')
 
-  function renderSidebar () {
-    return pug`
-      Menu.sidebar-menu
-        MenuItem(url='/') App
-        MenuItem(url='/about') About
-    `
-  }
 
-  return pug`
-    Layout
-      SmartSidebar.sidebar(
-        $open=$opened
-        renderContent=renderSidebar
-      )
-        Row.menu
-          Button(color='secondaryText' icon=faBars onPress=() => $opened.set(!opened))
-          H1.logo= APP_NAME
+  const renderContent = () => (
+    <Menu styleName='sidebar-menu'>
+      <Menu.Item onPress={onLogout}>Log Out</Menu.Item>
+    </Menu>
 
-        Div.body= children
-  `
+  )
+
+  return (
+    <Layout>
+      <Row styleName='menu' align='between'>
+        {/* <Button
+          styleName={['button', { active: url === '/' }]}
+          size='l'
+          shape='squared'
+          variant='text'
+          onPress={() => emit('url', '/')}
+        >
+          CONTACTS
+        </Button>
+        <Button
+          styleName={['button', { active: url === '/chats' }]}
+          size='l'
+          shape='squared'
+          variant='text'
+          onPress={() => emit('url', '/chats')}
+        >
+          CHATS
+        </Button> */}
+        <H5 styleName='logo'>Chat</H5>
+        <Popover styleName='caption' renderContent={renderContent}>
+          <Icon styleName='icon' icon={faEllipsisV} />
+        </Popover>
+      </Row>
+      <Div styleName='body'>{children}</Div>
+    </Layout>
+  )
 })

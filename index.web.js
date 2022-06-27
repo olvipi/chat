@@ -1,12 +1,14 @@
 import { Suspense, createElement as el } from 'react'
-import { render } from 'react-dom'
+import { createRoot } from 'react-dom/client';
 import Root from './Root'
 
 const ROOT_CONTAINER_ID = 'app'
 
-render(
-  el(Suspense, { fallback: null },
-    el(Root)
-  ),
-  document.getElementById(ROOT_CONTAINER_ID)
-)
+const container = document.getElementById(ROOT_CONTAINER_ID);
+
+const root = createRoot(container);
+
+root.render(el(Suspense, { fallback: null },
+  el(Root)
+));
+

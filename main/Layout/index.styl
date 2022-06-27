@@ -1,26 +1,26 @@
-$menuHeight = 6u
-
-.sidebar
-  &:part(sidebar)
-    border-right-width 1px
-    border-right-color rgba(black, 0.05)
-    background-color #eee
-  &-menu
-    padding-top 2u
-
 .menu
-  background-color rgba(black, 0.02)
-  height $menuHeight
-  z-index 1
   align-items center
-  padding 0 2u
+  background-color rgba(black, .02)
+  border-bottom-color rgba(black, .05)
   border-bottom-width 1px
-  border-bottom-color rgba(black, 0.05)
+  height 6u
+  padding-left 2u
+  z-index 1
 
-.logo
-  margin-left 2u
-  color $UI.colors.secondaryText
-  font(h5)
+.sidebar-menu
+  margin -2u
 
-.body
+.logo, .icon
+  color: $UI.colors.secondaryText
+
+.body, .button
   flex 1
+
+.button
+  &.active
+    border-bottom-color: $UI.colors.secondaryText
+    border-bottom-width 1px
+
+.caption
+  align-items center
+  width 5u
