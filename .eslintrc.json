@@ -6,11 +6,7 @@
     "node": true,
     "mocha": true
   },
-  "extends": [
-    "standard",
-    "standard-react",
-    "plugin:react-pug/all"
-  ],
+  "extends": ["standard", "standard-react", "plugin:react-pug/all"],
   "globals": {
     "Atomics": "readonly",
     "SharedArrayBuffer": "readonly"
@@ -24,12 +20,9 @@
     "ecmaVersion": 10,
     "sourceType": "module"
   },
-  "plugins": [
-    "react",
-    "react-pug",
-    "eslint-plugin-import-helpers"
-  ],
+  "plugins": ["react", "react-pug", "eslint-plugin-import-helpers"],
   "rules": {
+    "no-unused-vars": "warn",
     "prefer-const": "off",
     "react/jsx-handler-names": "off",
     "react/prop-types": "off",
@@ -52,7 +45,7 @@
           "/components/",
           ["/helpers/", "/hooks/"],
           ["sibling", "parent"],
-          "/.\/index.styl/"
+          "/./index.styl/"
         ]
       }
     ]

@@ -1,4 +1,18 @@
-.menu
+.root
+  align-items center
+  background-color rgba(black, .05)
+  flex 1
+
+  +web()
+    padding 2u 3u
+
+.container
+  background-color: $UI.colors.white
+  flex 1
+  max-width 1280px
+  width 100%
+
+.header
   align-items center
   background-color rgba(black, .02)
   border-bottom-color rgba(black, .05)
@@ -7,19 +21,15 @@
   padding-left 2u
   z-index 1
 
-.sidebar-menu
+.menu
   margin -2u
 
-.logo, .icon
+.logo
+.icon
   color: $UI.colors.secondaryText
 
-.body, .button
+.body
   flex 1
-
-.button
-  &.active
-    border-bottom-color: $UI.colors.secondaryText
-    border-bottom-width 1px
 
 .caption
   align-items center
