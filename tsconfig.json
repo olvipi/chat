@@ -4,19 +4,16 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "isolatedModules": true,
+    "resolveJsonModule": true,
     "jsx": "react",
-    "lib": [
-      "es6"
-    ],
+    "lib": ["es6", "DOM"],
     "moduleResolution": "node",
     "noEmit": true,
     "strict": false,
     "target": "esnext",
     "baseUrl": ".",
     "paths": {
-      "components/*": [
-        "components/*"
-      ]
+      "components/*": ["components/*"]
     }
   },
   "exclude": [
@@ -24,5 +21,6 @@
     "babel.config.js",
     "metro.config.js",
     "jest.config.js"
-  ]
+  ],
+  "typeRoots": ["./helpers/types"]
 }

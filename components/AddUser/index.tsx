@@ -1,15 +1,20 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { FC, useEffect, useMemo } from 'react'
 import { Button, Div, ObjectInput, Row } from '@startupjs/ui'
 import { batch, observer, useQuery, useValue } from 'startupjs'
 import _omit from 'lodash/omit'
 import './index.styl'
+import { IUser } from 'helpers/types'
 
 const fields = ['userName', 'password', 'passwordRepeat']
 
-
 const getRequiredMessage = text => `${text} name not provided`
 
-export default observer(function AddUser({ editUser, onClose }) {
+interface AddUserProps {
+  editUser?: IUser
+  onClose: () => void
+}
+
+const AddUser: FC<AddUserProps> = observer(({ editUser, onClose }) => {
   const [, $users] = useQuery('users', {})
   const [, $value] = useValue({})
   const [errors, $errors] = useValue({})
@@ -22,28 +27,31 @@ export default observer(function AddUser({ editUser, onClose }) {
     }
   }, [editUser])
 
-  const properties = useMemo(() => ({
-    // userName: {
-    //   input: 'text',
-    //   label: 'User Name',
-    //   onFocus: () => $errors.at('userName').del()
-    // },
-    // password: {
-    //   input: 'password',
-    //   label: 'Password',
-    //   onFocus: () => $errors.at('password').del()
-    // },
-    // passwordRepeat: {
-    //   input: 'password',
-    //   label: 'Repeat Password',
-    //   onFocus: () => $errors.at('passwordRepeat').del()
-    // },
-    blocked: {
-      input: 'checkbox',
-      label: 'User is blocked',
-      variant: 'switch'
-    }
-  }), [])
+  const properties = useMemo(
+    () => ({
+      // userName: {
+      //   input: 'text',
+      //   label: 'User Name',
+      //   onFocus: () => $errors.at('userName').del()
+      // },
+      // password: {
+      //   input: 'password',
+      //   label: 'Password',
+      //   onFocus: () => $errors.at('password').del()
+      // },
+      // passwordRepeat: {
+      //   input: 'password',
+      //   label: 'Repeat Password',
+      //   onFocus: () => $errors.at('passwordRepeat').del()
+      // },
+      blocked: {
+        input: 'checkbox',
+        label: 'User is blocked',
+        variant: 'switch',
+      },
+    }),
+    []
+  )
 
   const onCancel = () => {
     batch(() => {
@@ -76,35 +84,21 @@ export default observer(function AddUser({ editUser, onClose }) {
       await $users.addSelf(value)
     }
 
-
     onCancel()
   }
 
   return (
     <Div styleName='root'>
-      <ObjectInput
-        $value={$value}
-        errors={errors}
-        properties={properties}
-      />
+      <ObjectInput $value={$value} errors={errors} properties={properties} />
 
-      <Row
-        styleName='footer'
-        align='right'
-        pushed
-      >
-        <Button onPress={onCancel}>
-          Cancel
-        </Button>
-        <Button
-          color='primary'
-          pushed
-          onPress={onSave}
-        >
+      <Row styleName='footer' align='right' pushed>
+        <Button onPress={onCancel}>Cancel</Button>
+        <Button color='primary' pushed onPress={onSave}>
           {editUser?.id ? 'Save' : 'Create'}
         </Button>
       </Row>
     </Div>
   )
-
 })
+
+export default AddUser
